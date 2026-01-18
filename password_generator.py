@@ -9,6 +9,9 @@ import secrets
 import string
 import argparse
 
+# Define a safe subset of special characters that work well in most contexts
+SAFE_SPECIAL_CHARS = "!@#$%^&*()_+-=[]{}|;:,.<>?"
+
 
 def generate_password(length=16, use_uppercase=True, use_lowercase=True, 
                      use_digits=True, use_special=True):
@@ -40,7 +43,7 @@ def generate_password(length=16, use_uppercase=True, use_lowercase=True,
     if use_digits:
         characters += string.digits
     if use_special:
-        characters += string.punctuation
+        characters += SAFE_SPECIAL_CHARS
     
     if not characters:
         raise ValueError("At least one character type must be selected")
@@ -108,6 +111,11 @@ Examples:
     )
     
     args = parser.parse_args()
+    
+    # Validate number of passwords
+    if args.number < 1:
+        print("Error: Number of passwords must be at least 1")
+        return 1
     
     try:
         for i in range(args.number):
